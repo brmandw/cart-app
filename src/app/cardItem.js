@@ -1,31 +1,55 @@
+'use client';
 import Image from "next/image";
+import Counter from "./counter";
+import { useState, useEffect} from "react";
+import axios from "axios";
 
 export default function CardItem() {
+  const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  const getItems = async () => {
+    const { data } = await axios("https://fakestoreapi.com/products?limit=30");
+    setItems(data);
+    console.log(data);
+  }
+
   return (
     <div className="m-8">
-      <div className="m-5 px-16 py-8 flex items-center justify-between bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
-        <div className="flex items-center gap-8 w-130">
-            <img
-              src="/window.svg"
-              alt="Gambar"
-              className="w-8 h-8 lg:w-16 lg:h-16"
-            />
-            <div className="">
-              <h2 className="text-m lg:text-lg font-semibold mb-2">Judul</h2>
-              <p className="lg:text-m text-gray-600">Deskripsi</p>
+      {items.length === 0 ? (
+        <p>Loading...</p>
+      ) : (
+        items.map((item) => (
+          <div key={item.id} className="mx-5 my-5 lg:mx-40 px-16 py-8 flex items-center gap-8 justify-between bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div className="flex items-center gap-8 w-130">
+              <div className="w-20 h-20 flex items-center justify-center bg-gray-100">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="w-40 min-h-[60px]">
+                <h5 className="text-m lg:text-m font-semibold mb-2">{item.title}</h5>
+                <p className="lg:text-m text-gray-600">{item.category}</p>
+              </div>
             </div>
-        </div>
-        <div className="flex justify-between items-center w-full ">
-          <div>$0</div>
-          <div className="flex items-center">
-            <button className="bg-black text-white w-8 h-8 text-2xl">-</button>
-            <input className="w-8 h-8 text-center  flex justify-center items-center" type="text" />
-            <button className="bg-black mx-0.5 text-white w-8 h-8 text-xl">+</button>
+            <div className="flex gap-16 justify-center items-center w-full ">
+              <div className="w-24 text-center"><p>${item.price}</p></div>
+              <div className="flex items-center">
+                <Counter />
+              </div>
+              <div className="w-24 text-center"><p>$0</p></div>
+            </div>
           </div>
-          <div>$0</div>
-          <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300">Re</button>
-        </div>
-      </div>
+        ))
+      )}
+
     </div>
-  );
+  )
 }
+
