@@ -2,14 +2,15 @@
 import Counter from "./counter";
 
 
-export default function CardItem({ product, quantity, onIncrement, onDecrement }) {
+export default function CardItem({ product, quantity, onIncrement, onDecrement, onChange}) {
   const total = (product.price * quantity || 0).toFixed(2);
 
   return (
+    <>
+    { quantity === 0 ? null :
     <div
       key={product.id}
-      className="mx-5 my-5 lg:mx-40 px-16 py-8 flex items-center gap-8 justify-between bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
-    >
+      className="mx-5 my-5 lg:mx-40 px-16 py-8 flex items-center gap-8 justify-between bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="flex items-center gap-8 w-130">
         <div className="w-20 h-20 flex items-center justify-center bg-gray-100">
           <img
@@ -30,12 +31,14 @@ export default function CardItem({ product, quantity, onIncrement, onDecrement }
           <p>${product.price}</p>
         </div>
         <div className="flex items-center">
-          <Counter onDecrement={onDecrement} onIncrement={onIncrement} quantity={quantity}/>
+          <Counter onDecrement={onDecrement} onIncrement={onIncrement} quantity={quantity} onChange={(val) => onChange(val)}/>
         </div>
         <div className="w-24 text-center">
           <p>${total}</p>
         </div>
       </div>
     </div>
+    }
+    </>
   );
 }
