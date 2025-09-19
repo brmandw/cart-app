@@ -1,6 +1,7 @@
 "use client";
-import Image from "next/image";
-import CartItem from "./cardItem";
+
+import CartItem from "./cartItem";
+import Navbar from "./navbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -41,22 +42,28 @@ export default function cartList() {
     }));
   };
 
+  const cartTotal = Object.values(quantities).reduce((a, b) => a + b, 0);
+
   return (
-    <div className="m-8">
-      {items.length === 0 ? (
-        <p>Loading...</p>
-      ) : (
-        items.map((item) => (
-          <CartItem
-            key={item.id}
-            product={item}
-            quantity={quantities[item.id] || 0}
-            onDecrement={() => handleDecrement(item.id)}
-            onIncrement={() => handleIncrement(item.id)}
-            onChange={(val) => handleChange(item.id, val)}
-          />
-        )) 
-      )}
-    </div>
+    <>
+      <Navbar cartTotal={cartTotal} />
+
+      <div className="m-8">
+        {items.length === 0 ? (
+          <p>Loading...</p>
+        ) : (
+          items.map((item) => (
+            <CartItem
+              key={item.id}
+              product={item}
+              quantity={quantities[item.id] || 0}
+              onDecrement={() => handleDecrement(item.id)}
+              onIncrement={() => handleIncrement(item.id)}
+              onChange={(val) => handleChange(item.id, val)}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 }

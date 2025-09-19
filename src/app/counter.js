@@ -9,7 +9,7 @@ export default function Count({
   const handleChange = (e) => {
     const value = parseInt(e.target.value);
     if (!isNaN(value) && value >= 0) {
-      onChange(value); // 👉 lempar ke parent
+      onChange(value); 
     }
   };
   return (
