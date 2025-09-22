@@ -5,7 +5,7 @@ export default function cartList({ items, quantities, onIncrement, onDecrement, 
     <>
       <div className="m-8">
         {items.length === 0 ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center align-middle">Loading...</div>
         ) : (
           items.map((item) => (
             <CartItem
