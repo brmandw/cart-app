@@ -1,31 +1,16 @@
 "use client";
+import { useEffect } from "react";
 import Counter from "./counter";
-import { useState, useEffect } from "react";
+import useCartStore from "./store";
 
-export default function CardItem({
-  product,
-  quantity,
-  onIncrement,
-  onDecrement,
-  onChange,
-}) {
-  const total = (product.price * quantity || 0).toFixed(2);
-  const [inCart, setInCart] = useState(true);
-
+export default function CardItem( {product} ) {
+  const { increment, decrement, onChangeQuantity, quantities, inCart, setInCart } = useCartStore();
   useEffect(() => {
-    if (quantity === 0 && inCart) {
-      const confirmDelete = window.confirm("Hapus belanjaan dari keranjang?");
-      if (confirmDelete) {
-        setInCart(false);
-      } else {
-        onChange(1);
-      }
-    }
-  }, [quantity, inCart]);
-
+    setInCart(product.id)
+  }, [quantities[product.id], inCart])
   return (
     <>
-      {quantity === 0 ? null : (
+      {quantities[product.id] === 0 ? null : (
         <div
           key={product.id}
           className="mb-5 p-5 xl:mx-20 xl:px-24 lg:mx-15 lg:px-12 flex lg:justify-between
@@ -55,15 +40,14 @@ export default function CardItem({
               </div>
               <div className="xl:hidden md:hidden flex justify-between items-center w-full">
                 <div className="xl:hidden md:hidden mt-2 flex justify-end">
-                  <Counter
-                    onDecrement={onDecrement}
-                    onIncrement={onIncrement}
-                    quantity={quantity}
-                    onChange={(val) => onChange(val)}
-                  />
+                  <Counter 
+                  onIncrement={() => increment(product.id)}
+                  onDecrement={() => decrement(product.id)}
+                  quantity={quantities[product.id]}
+                  onChangeQuantity={(val) => onChangeQuantity(product.id, val)}/>
                 </div>
                 <div className="text-xs text-right font-bold mt-2 xl:hidden md:hidden">
-                  <p>Total: ${total}</p>
+                  <p>Total: {(product.price * quantities[product.id] || 0).toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -75,14 +59,14 @@ export default function CardItem({
               </div>
               <div className="flex items-center">
                 <Counter
-                  onDecrement={onDecrement}
-                  onIncrement={onIncrement}
-                  quantity={quantity}
-                  onChange={(val) => onChange(val)}
+                 onIncrement={() => increment(product.id)}
+                 onDecrement={() => decrement(product.id)}
+                 quantity={quantities[product.id]}
+                 onChangeQuantity={(val) => onChangeQuantity(product.id, val)}
                 />
               </div>
               <div className="w-24 text-sm font-bold text-center">
-                <p>${total}</p>
+                <p>${(product.price * quantities[product.id] || 0).toFixed(2)}</p>
               </div>
             </div>
         </div>

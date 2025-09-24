@@ -1,30 +1,26 @@
 "use client";
-import { useEffect } from "react";
-import axios from "axios";
 import Navbar from "./navbar";
 import CartList from "./cartList";
+import { useEffect } from "react";
 import useCartStore from "./store";
 
 export default function Home() {
-  const items = useCartStore((state) => state.items);
-  const quantities = useCartStore((state) => state.quantities);
-  const setItems = useCartStore((state) => state.setItems);
-  const increment = useCartStore((state) => state.increment);
-  const decrement = useCartStore((state) => state.decrement);
-  const setQuantity = useCartStore((state) => state.setQuantity);
-  const cartTotal = Object.values(quantities).reduce((a, b) => a + b, 0);
+  const { products, isLoading, error, getProducts } = useCartStore()
 
   useEffect(() => {
-    const getItems = async () => {
-      const { data } = await axios("https://fakestoreapi.com/products?limit=5");
-      setItems(data);
-    };
-    getItems();
-  }, [setItems]);
+    getProducts()
+  }, []);
+
+  if (isLoading) {
+    return <div>Memuat produk...</div>;
+  }
+
+  if (error) {
+    return <div>Terjadi kesalahan: {error}</div>;
+  }
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-[var(--luxury-dark)] pb-10">
-      <Navbar cartTotal={cartTotal} />
 
       <div className="mt-5 mx-8 xl:mx-28 xl:px-20 lg:mx-23 lg:px-8 hidden md:flex lg:flex xl:flex justify-between luxury-card">
         {/* Image*/}
@@ -45,13 +41,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <CartList
-        items={items}
-        quantities={quantities}
-        onIncrement={increment}
-        onDecrement={decrement}
-        onChangeQuantity={setQuantity}
-      />
+      <CartList />
+
     </div>
   );
 }
