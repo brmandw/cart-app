@@ -5,7 +5,7 @@ export default function cartList() {
   const { products } = useCartStore()
     return (
     <>
-      <div className="m-8">
+      <div className="mx-8">
        {
        products.map((product) => (
         <CartItem key={product.id} product={product} />

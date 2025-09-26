@@ -2,7 +2,7 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const useCartStore = create((set) => ({
+const useCartStore = create((set, get) => ({
   products: [],
   isLoading: false,
   error: null,
@@ -30,29 +30,49 @@ const useCartStore = create((set) => ({
       },
     })),
   decrement: (id) =>
-    set((state) => ({
-      quantities: {
-        ...state.quantities,
-        [id]: (state.quantities[id] || 0) - 1,
-      },
-    })),
+    set((state) => {
+      const currentQty = state.quantities[id] ?? 0;
+      if (currentQty <= 1) {
+        const confirmDelete = window.confirm("Hapus belanjaan dari keranjang?");
+        if (confirmDelete) {
+          const newQuantities = { ...state.quantities };
+          delete newQuantities[id];
+          return { quantities: newQuantities };
+        } else {
+          return state;
+        }
+      }
+      return {
+        quantities: {
+          ...state.quantities,
+          [id]: (state.quantities[id] || 0) - 1,
+        },
+      };
+    }),
   onChangeQuantity: (id, value) =>
     set((state) => ({
       quantities: { ...state.quantities, [id]: value },
     })),
   setInCart: (id) =>
     set((state) => {
-      if ((state.quantities[id] ?? 0) === 0 && state.inCart) {
+      if ((state.quantities[id] ?? 0) === 0 && state.inCart[id]) {
         const confirmDelete = window.confirm("Hapus belanjaan dari keranjang?");
         if (confirmDelete) {
-          return { inCart: false };
+          return {
+            inCart: { ...state.inCart, [id]: false },
+          };
         } else {
-        return {
-          quantities: { ...state.quantities, [id]: 1 },
-        };
+          return {
+            quantities: { ...state.quantities, [id]: 1 },
+          };
+        }
       }
-    } return state;
-}),
+      return state;
+    }),
+  cartTotal: () => {
+    const { quantities } = get();
+    return Object.values(quantities).reduce((sum, qty) => sum + qty, 0);
+  },
 }));
 
 export default useCartStore;

@@ -5,14 +5,14 @@ import { useEffect } from "react";
 import useCartStore from "./store";
 
 export default function Home() {
-  const { products, isLoading, error, getProducts } = useCartStore()
+  const { products, isLoading, error, getProducts } = useCartStore();
 
   useEffect(() => {
-    getProducts()
+    getProducts();
   }, []);
 
   if (isLoading) {
-    return <div>Memuat produk...</div>;
+    return <div className="flex justify-center mr-7">Memuat produk...</div>;
   }
 
   if (error) {
@@ -21,8 +21,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-[var(--luxury-dark)] pb-10">
+      <Navbar />
 
-      <div className="mt-5 mx-8 xl:mx-28 xl:px-20 lg:mx-23 lg:px-8 hidden md:flex lg:flex xl:flex justify-between luxury-card">
+      <div className="mt-3 mx-8 xl:mx-28 xl:px-20 lg:mx-23 lg:px-8 hidden md:flex lg:flex xl:flex justify-between luxury-card">
         {/* Image*/}
         <div className="w-15 h-15 xl:w-20 xl:h-20 flex items-center justify-center">
           <div className="text-center luxury-label">Product</div>
@@ -42,7 +43,6 @@ export default function Home() {
         </div>
       </div>
       <CartList />
-
     </div>
   );
 }

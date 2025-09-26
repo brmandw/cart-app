@@ -4,13 +4,11 @@ import Counter from "./counter";
 import useCartStore from "./store";
 
 export default function CardItem( {product} ) {
-  const { increment, decrement, onChangeQuantity, quantities, inCart, setInCart } = useCartStore();
-  useEffect(() => {
-    setInCart(product.id)
-  }, [quantities[product.id], inCart])
+  const { increment, decrement, onChangeQuantity, quantities } = useCartStore();
+
   return (
     <>
-      {quantities[product.id] === 0 ? null : (
+      {!quantities[product.id] ? null : (
         <div
           key={product.id}
           className="mb-5 p-5 xl:mx-20 xl:px-24 lg:mx-15 lg:px-12 flex lg:justify-between
