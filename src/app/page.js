@@ -3,46 +3,65 @@ import Navbar from "./navbar";
 import CartList from "./cartList";
 import { useEffect } from "react";
 import useCartStore from "./store";
+import Info from "./components/info"
 
 export default function Home() {
-  const { products, isLoading, error, getProducts } = useCartStore();
+  const {
+    isLoading,
+    error,
+    getProducts,
+  } = useCartStore();
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   if (isLoading) {
-    return <div className="flex justify-center mr-7">Memuat produk...</div>;
+    return (
+    <Info>
+       <div className="text-[var(--luxury-gold)] text-lg">Loading...</div>
+    </Info>
+    )
   }
 
   if (error) {
-    return <div>Terjadi kesalahan: {error}</div>;
+    return (
+    <Info>
+        <div className="text-red-500">Error: {error}</div>
+    </Info>
+    )
   }
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-[var(--luxury-dark)] pb-10">
       <Navbar />
-
-      <div className="mt-3 mx-8 xl:mx-28 xl:px-20 lg:mx-23 lg:px-8 hidden md:flex lg:flex xl:flex justify-between luxury-card">
-        {/* Image*/}
-        <div className="w-15 h-15 xl:w-20 xl:h-20 flex items-center justify-center">
-          <div className="text-center luxury-label">Product</div>
-        </div>
-
-        {/* Price counter and total for larger screen */}
-        <div className="hidden md:flex lg:flex xl:flex gap-8 justify-center items-center">
-          <div className="w-24 text-sm text-center ">
-            <div className="w-35 text-center pl-4 luxury-label">Price</div>
-          </div>
-          <div className="flex items-center ">
-            <div className="w-40 text-center luxury-label">Quantities</div>
-          </div>
-          <div className="w-24 text-sm font-bold text-center">
-            <div className="w-35 text-left pl-4 luxury-label">Total</div>
-          </div>
-        </div>
-      </div>
+      <Header />
       <CartList />
     </div>
   );
+}
+
+function Header() {
+  return (
+    <div className="luxury-container mx-4 md:mx-12 md:mb-4 xl:mx-32 xl:mb-4 py-7 px-10">
+      <div className="luxury-card hidden md:flex justify-between items-center">
+        <div className="w-full text-start">
+          <span className="text-[var(--luxury-gold)] text-sm font-light tracking-wide">
+            Product
+          </span>
+        </div>
+        <div className="flex gap-10 mr-3">
+          <div className="w-20 text-center text-[var(--luxury-gold)] text-sm font-light">
+            Price
+          </div>
+          <div className="w-32 text-center text-[var(--luxury-gold)] text-sm font-light">
+            Quantity
+          </div>
+          <div className="w-20 text-center text-[var(--luxury-gold)] text-sm font-light">
+            Total
+          </div>
+        </div>
+      </div>
+    </div>
+    )
 }

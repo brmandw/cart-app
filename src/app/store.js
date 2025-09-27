@@ -6,73 +6,30 @@ const useCartStore = create((set, get) => ({
   products: [],
   isLoading: false,
   error: null,
-  quantities: {},
-  inCart: true,
   getProducts: async () => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null }); 
     try {
-      const { data } = await axios("https://fakestoreapi.com/products?limit=5");
+      const { data } = await axios("https://fakestoreapi.com/products?limit=10");
       set({ products: data, isLoading: false });
-      const init = {};
-      data.forEach((item) => {
-        init[item.id] = 1;
-      });
-      set({ quantities: init });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }
   },
-  increment: (id) =>
+
+  cartCount: 0,
+  setCC: () => set((state) => ({
+    cartCount: state.products.length
+  })),
+  addToCart: (val) =>
     set((state) => ({
-      quantities: {
-        ...state.quantities,
-        [id]: (state.quantities[id] || 0) + 1,
-      },
+      cartCount: state.cartCount + val ,
     })),
-  decrement: (id) =>
-    set((state) => {
-      const currentQty = state.quantities[id] ?? 0;
-      if (currentQty <= 1) {
-        const confirmDelete = window.confirm("Hapus belanjaan dari keranjang?");
-        if (confirmDelete) {
-          const newQuantities = { ...state.quantities };
-          delete newQuantities[id];
-          return { quantities: newQuantities };
-        } else {
-          return state;
-        }
-      }
-      return {
-        quantities: {
-          ...state.quantities,
-          [id]: (state.quantities[id] || 0) - 1,
-        },
-      };
-    }),
-  onChangeQuantity: (id, value) =>
+
+  rmvFromCart: (val) =>
     set((state) => ({
-      quantities: { ...state.quantities, [id]: value },
+      cartCount: state.cartCount - val,
     })),
-  setInCart: (id) =>
-    set((state) => {
-      if ((state.quantities[id] ?? 0) === 0 && state.inCart[id]) {
-        const confirmDelete = window.confirm("Hapus belanjaan dari keranjang?");
-        if (confirmDelete) {
-          return {
-            inCart: { ...state.inCart, [id]: false },
-          };
-        } else {
-          return {
-            quantities: { ...state.quantities, [id]: 1 },
-          };
-        }
-      }
-      return state;
-    }),
-  cartTotal: () => {
-    const { quantities } = get();
-    return Object.values(quantities).reduce((sum, qty) => sum + qty, 0);
-  },
+
 }));
 
 export default useCartStore;
