@@ -43,7 +43,7 @@ export default function Home() {
 
 function Header() {
   return (
-    <div className="luxury-container mx-4 md:mx-12 md:mb-4 xl:mx-32 xl:mb-4 py-7 px-10">
+    <div className="luxury-container mx-4 md:mx-12 md:mb-4 xl:mx-32 xl:mb-4 py-7 px-10 mt-10">
       <div className="luxury-card hidden md:flex justify-between items-center">
         <div className="w-full text-start">
           <span className="text-[var(--luxury-gold)] text-sm font-light tracking-wide">
@@ -57,7 +57,7 @@ function Header() {
           <div className="w-32 text-center text-[var(--luxury-gold)] text-sm font-light">
             Quantity
           </div>
-          <div className="w-20 text-center text-[var(--luxury-gold)] text-sm font-light">
+          <div className="w-20 text-center text-[var(--luxury-gold)] text-sm font-bold">
             Total
           </div>
         </div>

@@ -60,9 +60,9 @@ export default function CardItem({ product }) {
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           {/* Info & Mobile Controls */}
           <div className="flex-1 min-w-0">
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               {/* Image */}
-              <div className="w-15 h-15 md:w-20 md:h-20 lg:w-20 lg:h-20 flex-shrink-0">
+              <div className="w-20 h-20 md:w-25 md:h-25 lg:w-25 lg:h-25 flex-shrink-0">
                 <img
                   src={product.image}
                   alt={product.title}
@@ -73,7 +73,7 @@ export default function CardItem({ product }) {
                 <h5 className="text-white font-medium text-sm md:text-base truncate">
                   {product.title}
                 </h5>
-                <p className="text-gray-400 text-xs md:text-sm mt-1">
+                <p className="text-gray-300 text-xs md:text-sm mt-1">
                   {product.category}
                 </p>
                 <p className="text-[var(--luxury-gold)] text-sm md:font-medium lg:font-medium mb-2 md:hidden lg:hidden">
@@ -82,7 +82,7 @@ export default function CardItem({ product }) {
               </div>
             </div>
             {/* Mobile-only price & total */}
-            <div className="md:hidden mt-4 flex justify-between items-center">
+            <div className="md:hidden mt-6 flex justify-between items-center">
               <div>
                 <p className="text-[var(--luxury-gold)] font-medium mb-4 hidden">
                   ${product.price}
@@ -96,7 +96,7 @@ export default function CardItem({ product }) {
               </div>
               <div className="text-right">
                 <p className="text-white font-bold text-sm">
-                  ${(product.price * count || 0).toFixed(2)}
+                  ${(product.price * count || 0)}
                 </p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function CardItem({ product }) {
               count={count}
             />
             <div className="w-20 text-center text-white font-bold">
-              {(product.price * count || 0).toFixed(2)}
+              ${(product.price * count || 0)}
             </div>
           </div>
         </div>
