@@ -2,15 +2,16 @@
 import { useEffect, useState } from "react";
 import Counter from "./counter";
 import useCartStore from "./store";
+import Image from "next/image";
 
 export default function CardItem({ product }) {
   const [count, setCount] = useState(1);
   const [hidden, setHidden] = useState(false);
-  const { setCC, addToCart, rmvFromCart } = useCartStore()
+  const { setCC, addToCart, rmvFromCart, products } = useCartStore()
 
   useEffect(() => {
     setCC()
-  }, [])
+  }, [setCC])
 
   const increment = () => {
     setCount(count + 1);
@@ -63,9 +64,11 @@ export default function CardItem({ product }) {
             <div className="flex gap-4 items-center">
               {/* Image */}
               <div className="w-20 h-20 md:w-25 md:h-25 lg:w-25 lg:h-25 flex-shrink-0">
-                <img
+                <Image
                   src={product.image}
                   alt={product.title}
+                  width={100}
+                  height={100}
                   className="w-full h-full object-contain rounded-md"
                 />
               </div>
@@ -77,7 +80,7 @@ export default function CardItem({ product }) {
                   {product.category}
                 </p>
                 <p className="text-[var(--luxury-gold)] text-sm md:font-medium lg:font-medium mb-2 md:hidden lg:hidden">
-                  ${product.price}
+                  ${product.price.toFixed(2)}
                 </p>
               </div>
             </div>
@@ -96,7 +99,7 @@ export default function CardItem({ product }) {
               </div>
               <div className="text-right">
                 <p className="text-white font-bold text-sm">
-                  ${(product.price * count || 0)}
+                  ${(product.price * count || 0).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -114,7 +117,7 @@ export default function CardItem({ product }) {
               count={count}
             />
             <div className="w-20 text-center text-white font-bold">
-              ${(product.price * count || 0)}
+              ${(product.price * count || 0).toFixed(2)}
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import CartItem from "./cartItem";
 import useCartStore from "./store";
 
-export default function cartList() {
+export default function CartList() {
   const { products } = useCartStore()
     return (
     <>
